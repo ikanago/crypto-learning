@@ -1,4 +1,5 @@
 pub mod elgamel;
+pub mod field;
 
 use rand::Rng;
 
