@@ -28,8 +28,7 @@ pub fn generate_key<R: Rng>(rng: &mut R, bits: u8) -> ((u64, u64, u64), u64) {
     ((p, g, y), x)
 }
 
-pub fn encrypt(m: u64, public_key: (u64, u64, u64)) -> (u64, u64) {
-    let mut rng = thread_rng();
+pub fn encrypt<R: Rng>(rng: &mut R, m: u64, public_key: (u64, u64, u64)) -> (u64, u64) {
     let (p, g, y) = public_key;
     let r = rng.gen_range(0..(p - 1));
     let c1 = mod_pow(g, r, p);
@@ -51,9 +50,9 @@ mod tests {
     #[test]
     fn test_elgamel() {
         let mut rng = thread_rng();
-        let (public_key, secret_key) = generate_key(&mut rng, 20);
-        let m = 314158;
-        let c = encrypt(m, public_key);
+        let (public_key, secret_key) = generate_key(&mut rng, 24);
+        let m = 3141581;
+        let c = encrypt(&mut rng, m, public_key);
         let d = decrypt(c, public_key, secret_key);
         assert_eq!(m, d);
     }
