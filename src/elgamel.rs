@@ -1,16 +1,15 @@
 use crate::{generate_prime, is_prime, mod_pow};
-use rand::{thread_rng, Rng};
+use rand::Rng;
 
-pub fn generate_key(bits: u8) -> ((u64, u64, u64), u64) {
+pub fn generate_key<R: Rng>(rng: &mut R, bits: u8) -> ((u64, u64, u64), u64) {
     let (p, q) = loop {
-        let q = generate_prime(bits);
+        let q = generate_prime(rng, bits);
         let p = 2 * q + 1;
         if is_prime(p) {
             break (p, q);
         }
     };
 
-    let mut rng = thread_rng();
     // Generate primitive element `g`
     let g = loop {
         let g: u64 = rng.gen_range(3..p);
@@ -47,10 +46,12 @@ pub fn decrypt(ciphered: (u64, u64), public_key: (u64, u64, u64), secret_key: u6
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rand::thread_rng;
 
     #[test]
     fn test_elgamel() {
-        let (public_key, secret_key) = generate_key(20);
+        let mut rng = thread_rng();
+        let (public_key, secret_key) = generate_key(&mut rng, 20);
         let m = 314158;
         let c = encrypt(m, public_key);
         let d = decrypt(c, public_key, secret_key);

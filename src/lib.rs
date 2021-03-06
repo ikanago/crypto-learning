@@ -1,6 +1,6 @@
 pub mod elgamel;
 
-use rand::{thread_rng, Rng};
+use rand::Rng;
 
 /// Determine `n` is prime number.
 pub fn is_prime(n: u64) -> bool {
@@ -15,12 +15,11 @@ pub fn is_prime(n: u64) -> bool {
 }
 
 /// Generate specified bits prime number.
-pub fn generate_prime(bits: u8) -> u64 {
+pub fn generate_prime<R: Rng>(rng: &mut R, bits: u8) -> u64 {
     if bits == 0 {
         panic!("Number of bits should be non-zero");
     }
 
-    let mut rng = thread_rng();
     let lower_bound = 1 << (bits - 1);
     let upper_bound = 1 << bits;
     loop {
@@ -52,6 +51,7 @@ pub fn mod_pow(base: u64, exp: u64, modulus: u64) -> u64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rand::thread_rng;
 
     #[test]
     fn prime() {
@@ -60,7 +60,8 @@ mod tests {
 
     #[test]
     fn get_prime() {
-        let n = generate_prime(16);
+        let mut rng = thread_rng();
+        let n = generate_prime(&mut rng, 16);
         assert!(is_prime(n));
     }
 
