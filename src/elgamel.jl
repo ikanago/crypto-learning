@@ -2,7 +2,7 @@ module Elgamel
 
 using crypto_learning.Util, Random
 
-function generate_key(bits::Integer)
+function generate_key(bits::Integer)::Tuple{Tuple{BigInt,BigInt,BigInt},BigInt}
     p = 0
     q = 0
     while true
@@ -12,7 +12,7 @@ function generate_key(bits::Integer)
             break
         end
     end
-    
+
     # Primitive element
     g = 0
     while true
@@ -27,24 +27,29 @@ function generate_key(bits::Integer)
     end
 
     # Private Key
-    x = rand(2:(p - 1))
+    x = rand(2:(p-1))
     # Public Key
     y = powermod(g, x, p)
     (p, g, y), x
 end
 
-function encrypt(m::Integer, public_key::Tuple{Integer, Integer, Integer})
+function encrypt(m::BigInt, public_key::Tuple{BigInt,BigInt,BigInt})::Tuple{BigInt,BigInt}
     (p, g, y) = public_key
-    r = rand(0:(p - 2))
+    @assert(0 <= m < p)
+    r = rand(0:(p-1))
     c1 = powermod(g, r, p)
-    c2 = m * powermod(y, r, p) % p
+    c2 = (m * powermod(y, r, p)) % p
     c1, c2
 end
 
-function decrypt(ciphered::Tuple{Integer, Integer}, public_key::Tuple{Integer, Integer, Integer}, private_key::Integer)
+function decrypt(
+    ciphered::Tuple{BigInt,BigInt},
+    public_key::Tuple{BigInt,BigInt,BigInt},
+    private_key::BigInt,
+)::BigInt
     (p, g, y) = public_key
     (c1, c2) = ciphered
-    c2 * powermod(c1, p - 1 - private_key, p) % p
+    (c2 * powermod(c1, p - 1 - private_key, p)) % p
 end
 
 end
