@@ -2,3 +2,6 @@ name = "crypto_learning"
 uuid = "70fcb5f5-b27b-49b4-9bb3-398a18cdbf88"
 authors = ["ikanago <ikanago@ikanago.dev>"]
 version = "0.1.0"
+
+[deps]
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
