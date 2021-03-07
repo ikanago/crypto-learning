@@ -1,0 +1,4 @@
+name = "crypto_learning"
+uuid = "70fcb5f5-b27b-49b4-9bb3-398a18cdbf88"
+authors = ["ikanago <ikanago@ikanago.dev>"]
+version = "0.1.0"
