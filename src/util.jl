@@ -20,10 +20,10 @@ function is_prime(n::BigInt)::Bool
 end
 
 function generate_prime(bits::Integer)::BigInt
-    lower_bound = 1 << (bits - 1)
-    upper_bound = 1 << bits
+    lower_bound = BigInt(1 << (bits - 1))
+    upper_bound = BigInt(1 << bits)
     while true
-        n = BigInt(rand(lower_bound:upper_bound))
+        n = rand(big.(lower_bound:upper_bound))
         if is_prime(n)
             return BigInt(n)
         end
