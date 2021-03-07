@@ -2,6 +2,8 @@ module Util
 
 using Random
 
+export is_prime, generate_prime
+
 function is_prime(n::Integer)
     if n < 1
         return false

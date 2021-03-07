@@ -1,6 +1,6 @@
 module crypto_learning
 
 include("util.jl")
-export Util
+include("elgamel.jl")
 
 end # module
